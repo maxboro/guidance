@@ -4,26 +4,40 @@ import numpy as np
 from .units import Unit
 
 class Guidance(ABC):
-
-    @abstractmethod
     def __init__(self, interceptor: Unit, target: Unit):
-        pass
+        self.interceptor = interceptor
+        self.target = target
 
     @abstractmethod
     def get_angle(self) -> float:
         pass
 
 class PurePursuit(Guidance):
+    def get_angle(self) -> float:
+        los_vector = self.target.coords - self.interceptor.coords
+        los_vector_angle = math.degrees(np.arctan2(los_vector[1], los_vector[0]))
+        return los_vector_angle
+
+class PropNav(Guidance):
     def __init__(self, interceptor: Unit, target: Unit):
-        self.interceptor = interceptor
-        self.target = target
+        super().__init__(interceptor, target)
+        self._prev_los_vector_angle = None
+        self.gain = 5
 
     def get_angle(self) -> float:
-        direction_vector = self.target.coords - self.interceptor.coords
-        direction_vector_angle = math.degrees(np.arctan2(direction_vector[1], direction_vector[0]))
-        return direction_vector_angle
+        los_vector = self.target.coords - self.interceptor.coords
+        los_vector_angle = math.degrees(np.arctan2(los_vector[1], los_vector[0]))
+        if self._prev_los_vector_angle is None:
+            los_vector_delta = 0
+        else:
+            los_vector_delta = los_vector_angle - self._prev_los_vector_angle
+        direction_vector_angle_to_use = los_vector_angle + los_vector_delta * self.gain
+        self._prev_los_vector_angle = los_vector_angle
+        return direction_vector_angle_to_use
 
 def get_guidance(guidance_mode: str) -> Guidance:
     match guidance_mode:
         case "pure_pursuit":
             return PurePursuit
+        case "prop_nav":
+            return PropNav
