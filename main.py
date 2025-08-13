@@ -1,4 +1,3 @@
-import numpy as np
 from src.simulation import run_simulation
 from src.units import Unit
 from src.utils import load_settings
