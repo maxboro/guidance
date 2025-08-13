@@ -1,7 +1,7 @@
+guidance: "pure_pursuit"
 simulation:
   target_fps: 10
   sim_n_steps: 120
-  guidance: "pure_pursuit"
 target:
   start_x: 100
   start_y: 100

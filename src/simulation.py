@@ -3,8 +3,9 @@ import matplotlib
 matplotlib.use("Qt5Agg")
 import matplotlib.pyplot as plt
 from .units import Unit
+from .guidance import Guidance
 
-def run_simulation(target: Unit, interceptor: Unit, target_fps: float, sim_n_steps: int, guidance: str):
+def run_simulation(target: Unit, interceptor: Unit, guidance: Guidance, target_fps: float, sim_n_steps: int):
     plt.ion()  # interactive on
     fig, ax = plt.subplots(figsize=(8, 8))
     ax.set_title("Trajectory")
@@ -26,7 +27,8 @@ def run_simulation(target: Unit, interceptor: Unit, target_fps: float, sim_n_ste
 
         # ---- simulation step ----
         target.update(150 + n_step / 1.5)
-        interceptor.update(90) # placeholder
+        proposed_interception_angle = guidance.get_angle()
+        interceptor.update(proposed_interception_angle)
 
         target_x_coords.append(target.coords[0])
         target_y_coords.append(target.coords[1])
@@ -42,6 +44,7 @@ def run_simulation(target: Unit, interceptor: Unit, target_fps: float, sim_n_ste
         head2.set_data([interceptor_x[-1]], [interceptor_y[-1]])
 
         ax.relim(); ax.autoscale_view()
+        plt.title(f'Trajectory. IC Angle {proposed_interception_angle:,.1f}')
 
         # This processes GUI events + draws without freezing the window
         plt.pause(0.001)
