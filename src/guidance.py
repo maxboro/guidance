@@ -23,6 +23,12 @@ class PropNav(Guidance):
         super().__init__(interceptor, target)
         self._prev_los_vector_angle = None
         self.gain = 5
+    
+    @staticmethod
+    def _wrap_deg(angle: float) -> float:
+        """Wrap to (-180, 180]"""
+        angle = (angle + 180.0) % 360.0 - 180.0
+        return 180.0 if angle == -180.0 else angle
 
     def get_angle(self) -> float:
         los_vector = self.target.coords - self.interceptor.coords
@@ -30,8 +36,8 @@ class PropNav(Guidance):
         if self._prev_los_vector_angle is None:
             los_vector_delta = 0
         else:
-            los_vector_delta = los_vector_angle - self._prev_los_vector_angle
-        direction_vector_angle_to_use = los_vector_angle + los_vector_delta * self.gain
+            los_vector_delta = self._wrap_deg(los_vector_angle - self._prev_los_vector_angle)
+        direction_vector_angle_to_use = self._wrap_deg(los_vector_angle + los_vector_delta * self.gain)
         self._prev_los_vector_angle = los_vector_angle
         return direction_vector_angle_to_use
 
