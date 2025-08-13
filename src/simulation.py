@@ -13,6 +13,18 @@ def interception_event_detection(target: Unit, interceptor: Unit,  blast_radius:
     else:
         return False
 
+def wait_till_window_visible(fig):
+    # --- make sure the GUI is created and visible before starting the sim ---
+    fig.canvas.draw_idle()           # schedule a draw
+    plt.show(block=False)            # create and show the window without blocking
+
+    # Wait until the underlying Qt window is visible
+    win = getattr(fig.canvas.manager, "window", None)
+    while win is None or not win.isVisible():
+        plt.pause(1)              # lets Qt process events & show the window
+        win = getattr(fig.canvas.manager, "window", None)
+
+
 def run_simulation(target: Unit, interceptor: Unit, guidance: Guidance, target_fps: float, sim_n_steps: int, blast_radius: float):
     plt.ion()  # interactive on
     fig, ax = plt.subplots(figsize=(8, 8))
@@ -31,6 +43,7 @@ def run_simulation(target: Unit, interceptor: Unit, guidance: Guidance, target_f
 
     frame_dt = 1.0 / target_fps
     intercepted = False
+    wait_till_window_visible(fig)
     for n_step in range(sim_n_steps):
         t0 = time.perf_counter()
 
