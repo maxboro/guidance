@@ -2,6 +2,7 @@ from abc import ABC, abstractmethod
 import math
 import numpy as np
 from .units import Unit
+from .utils import wrap_deg
 
 class Guidance(ABC):
     def __init__(self, interceptor: Unit, target: Unit):
@@ -26,12 +27,6 @@ class PropNav(Guidance):
         self.dt = 1
         self._gamma_deg = None  # internal missile heading
 
-    @staticmethod
-    def _wrap_deg(angle: float) -> float:
-        """Wrap to (-180, 180]"""
-        angle = (angle + 180.0) % 360.0 - 180.0
-        return 180.0 if angle == -180.0 else angle
-
     def get_angle(self) -> float:
         los_vector = self.target.coords - self.interceptor.coords
         los_vector_angle = math.degrees(np.arctan2(los_vector[1], los_vector[0]))
@@ -40,9 +35,9 @@ class PropNav(Guidance):
             los_rate_deg = 0
             self._gamma_deg = los_vector_angle
         else:
-            los_rate_deg = self._wrap_deg(los_vector_angle - self._prev_los_vector_angle) / self.dt
+            los_rate_deg = wrap_deg(los_vector_angle - self._prev_los_vector_angle) / self.dt
             gamma_rate_deg = los_rate_deg * self.gain
-            self._gamma_deg = self._wrap_deg(self._gamma_deg + gamma_rate_deg * self.dt)
+            self._gamma_deg = wrap_deg(self._gamma_deg + gamma_rate_deg * self.dt)
         self._prev_los_vector_angle = los_vector_angle
         return self._gamma_deg
 
