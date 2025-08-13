@@ -1,9 +1,17 @@
 import time
+import numpy as np
 import matplotlib
 matplotlib.use("Qt5Agg")
 import matplotlib.pyplot as plt
 from .units import Unit
 from .guidance import Guidance
+
+def interception_event_detection(target: Unit, interceptor: Unit):
+    distance = np.linalg.norm(target.coords - interceptor.coords)
+    if distance < 2:
+        return True
+    else:
+        return False
 
 def run_simulation(target: Unit, interceptor: Unit, guidance: Guidance, target_fps: float, sim_n_steps: int):
     plt.ion()  # interactive on
@@ -48,6 +56,10 @@ def run_simulation(target: Unit, interceptor: Unit, guidance: Guidance, target_f
 
         # This processes GUI events + draws without freezing the window
         plt.pause(0.001)
+
+        if interception_event_detection(target, interceptor):
+            print("Intercepted")
+            break
 
         # Pace the loop to ~target_fps
         slept = time.perf_counter() - t0
