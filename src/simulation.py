@@ -66,11 +66,16 @@ def run_simulation(target: Unit, interceptor: Unit, guidance: Guidance, target_f
         slept = time.perf_counter() - t0
         if slept < frame_dt:
             time.sleep(frame_dt - slept)
+    
+    if intercepted:
+        result = "Intercepted"
+    else:
+        result = "Not Intercepted"
+    print(result)
+    plt.title(result)
+
 
     plt.ioff()
     plt.show()
 
-    if intercepted:
-        print("Intercepted")
-    else:
-        print("Not Intercepted")
+   
