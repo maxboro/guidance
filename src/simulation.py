@@ -24,7 +24,7 @@ def run_simulation(target: Unit, interceptor: Unit, guidance: Guidance, target_f
     (head,) = ax.plot([], [], "o", color = "tab:blue")
     (line2,) = ax.plot([], [], "--", label="interceptor", color="tab:orange")
     (head2,) = ax.plot([], [], "o", color="tab:orange")
-    ax.legend(loc="upper left")
+    ax.legend(loc="lower right")
 
     target_x_coords, target_y_coords = [], []
     interceptor_x, interceptor_y = [], []

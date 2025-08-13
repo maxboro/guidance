@@ -11,7 +11,7 @@ class Guidance(ABC):
 
     @abstractmethod
     def get_angle(self) -> float:
-        pass    
+        pass
 
 class PurePursuit(Guidance):
     def __init__(self, interceptor: Unit, target: Unit):
