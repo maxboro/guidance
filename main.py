@@ -1,15 +1,15 @@
 import numpy as np
 from src.simulation import run_simulation
 from src.units import Unit
+from src.utils import load_settings
 
 def main():
-    coords_target = np.array([100, 100])
-    coords_interceptor = np.array([0, 0])
+    settings = load_settings()
 
-    target = Unit(coords_target, speed=2)
-    interceptor = Unit(coords_interceptor, speed = 3)
+    target = Unit(**settings["target"])
+    interceptor = Unit(**settings["inteseptor"])
 
-    run_simulation(target, interceptor)
+    run_simulation(target, interceptor, **settings["simulation"])
 
 if __name__ == "__main__":
     main()

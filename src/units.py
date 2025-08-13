@@ -7,8 +7,8 @@ class Unit:
     
     Has constant speed.
     """
-    def __init__(self, start_coords: np.ndarray, speed: float):
-        self.coords = start_coords.astype(float)
+    def __init__(self, start_x: float, start_y: float, speed: float):
+        self.coords = np.array([start_x, start_y], dtype=float)
         self.speed = speed
 
     def update(self, angle_deg: float):

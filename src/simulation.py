@@ -4,7 +4,7 @@ matplotlib.use("Qt5Agg")
 import matplotlib.pyplot as plt
 from .units import Unit
 
-def run_simulation(target: Unit, interceptor: Unit):
+def run_simulation(target: Unit, interceptor: Unit, target_fps: float, sim_n_steps: int, guidance: str):
     plt.ion()  # interactive on
     fig, ax = plt.subplots(figsize=(8, 8))
     ax.set_title("Trajectory")
@@ -20,10 +20,7 @@ def run_simulation(target: Unit, interceptor: Unit):
     target_x_coords, target_y_coords = [], []
     interceptor_x, interceptor_y = [], []
 
-    target_fps = 10          # 10 frames/sec
     frame_dt = 1.0 / target_fps
-    sim_n_steps = 120
-
     for n_step in range(sim_n_steps):
         t0 = time.perf_counter()
 
