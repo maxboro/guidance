@@ -2,10 +2,11 @@ guidance: "prop_nav"
 simulation:
   target_fps: 10
   sim_n_steps: 120
+  blast_radius: 4
 target:
-  start_x: 200
+  start_x: 301
   start_y: 100
-  speed: 2
+  speed: 4
 inteseptor:
   start_x: 0
   start_y: 0

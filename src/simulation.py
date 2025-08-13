@@ -6,14 +6,14 @@ import matplotlib.pyplot as plt
 from .units import Unit
 from .guidance import Guidance
 
-def interception_event_detection(target: Unit, interceptor: Unit):
+def interception_event_detection(target: Unit, interceptor: Unit,  blast_radius: float):
     distance = np.linalg.norm(target.coords - interceptor.coords)
-    if distance < 2:
+    if distance < blast_radius:
         return True
     else:
         return False
 
-def run_simulation(target: Unit, interceptor: Unit, guidance: Guidance, target_fps: float, sim_n_steps: int):
+def run_simulation(target: Unit, interceptor: Unit, guidance: Guidance, target_fps: float, sim_n_steps: int, blast_radius: float):
     plt.ion()  # interactive on
     fig, ax = plt.subplots(figsize=(8, 8))
     ax.set_title("Trajectory")
@@ -30,6 +30,7 @@ def run_simulation(target: Unit, interceptor: Unit, guidance: Guidance, target_f
     interceptor_x, interceptor_y = [], []
 
     frame_dt = 1.0 / target_fps
+    intercepted = False
     for n_step in range(sim_n_steps):
         t0 = time.perf_counter()
 
@@ -57,8 +58,8 @@ def run_simulation(target: Unit, interceptor: Unit, guidance: Guidance, target_f
         # This processes GUI events + draws without freezing the window
         plt.pause(0.001)
 
-        if interception_event_detection(target, interceptor):
-            print("Intercepted")
+        if interception_event_detection(target, interceptor, blast_radius):
+            intercepted = True
             break
 
         # Pace the loop to ~target_fps
@@ -68,3 +69,8 @@ def run_simulation(target: Unit, interceptor: Unit, guidance: Guidance, target_f
 
     plt.ioff()
     plt.show()
+
+    if intercepted:
+        print("Intercepted")
+    else:
+        print("Not Intercepted")
