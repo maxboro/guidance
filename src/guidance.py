@@ -44,6 +44,9 @@ class PropNav(Guidance):
             los_rate_deg = wrap_deg(los_vector_angle - self._prev_los_vector_angle) / self.dt
             gamma_rate_deg = los_rate_deg * self.gain * vc_2_vi
             self._gamma_deg = wrap_deg(self._gamma_deg + gamma_rate_deg * self.dt)
+        msg = f"LOS {los_vector_angle:.1f}, LOS rate {los_rate_deg:.1f}, velocity_closing {velocity_closing:.1f}, "\
+                f"velocity_interseptor {velocity_interseptor:.1f}, gamma_rate_deg {gamma_rate_deg:.1f}, gamma_deg {self._gamma_deg:.1f}"
+        print(msg)
         self._prev_los_vector_angle = los_vector_angle
         self._prev_interceptor_coords = self.interceptor.coords.copy()
         self._prev_distance = distance
