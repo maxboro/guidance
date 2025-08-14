@@ -5,6 +5,7 @@ matplotlib.use("Qt5Agg")
 import matplotlib.pyplot as plt
 from .units import Unit
 from .guidance import Guidance
+from .missions import TargetMission
 
 def interception_event_detection(target: Unit, interceptor: Unit,  blast_radius: float):
     distance = np.linalg.norm(target.coords - interceptor.coords)
@@ -25,7 +26,8 @@ def wait_till_window_visible(fig):
         win = getattr(fig.canvas.manager, "window", None)
 
 
-def run_simulation(target: Unit, interceptor: Unit, guidance: Guidance, target_fps: float, sim_n_steps: int, blast_radius: float):
+def run_simulation(target: Unit, interceptor: Unit, guidance: Guidance, mission: TargetMission,
+                   target_fps: float, sim_n_steps: int, blast_radius: float):
     plt.ion()  # interactive on
     fig, ax = plt.subplots(figsize=(8, 8))
     ax.set_title("Trajectory")
@@ -48,7 +50,8 @@ def run_simulation(target: Unit, interceptor: Unit, guidance: Guidance, target_f
         t0 = time.perf_counter()
 
         # ---- simulation step ----
-        target.update(150 + n_step / 1.5)
+        angle_for_target = mission.get_angle(n_step, sim_n_steps)
+        target.update(angle_for_target)
         proposed_interception_angle = guidance.get_angle()
         interceptor.update(proposed_interception_angle)
 
