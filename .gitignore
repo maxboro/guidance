@@ -3,3 +3,5 @@ notebooks
 __pycache__
 .vscode
 .venv
+output
+
