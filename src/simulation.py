@@ -98,5 +98,3 @@ def run_simulation(target: Unit, interceptor: Unit, guidance: Guidance, mission:
 
     plt.ioff()
     plt.show()
-
-   
