@@ -8,7 +8,7 @@ from .units import Unit
 from .guidance import Guidance
 from .missions import TargetMission
 
-def interception_event_detection(target: Unit, interceptor: Unit,  blast_radius: float):
+def interception_event_detection(target: Unit, interceptor: Unit,  blast_radius: float) -> bool:
     distance = np.linalg.norm(target.coords - interceptor.coords)
     if distance < blast_radius:
         return True
