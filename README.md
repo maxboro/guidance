@@ -5,6 +5,7 @@ Target interception simple example in 2D. Tested in Python 3.12.4.
 - Two guidance modes:
     - PurePursuit – points directly at the target’s line of sight (LOS).
     - PropNav – classical proportional navigation using LOS rate and a navigation gain.
+    - PropNavWoSpeed – PropNav for cases we don't know our speed and closing speed. Usually works, but sometimes fails.
 - Two example target missions with simple heading profiles.
 - Real-time GUI animation (Qt5Agg) and optional GIF recording to ./output/trajectory.gif.
 - YAML-based configuration for quick experimentation.
@@ -14,7 +15,7 @@ Target interception simple example in 2D. Tested in Python 3.12.4.
 ├── main.py
 ├── settings.yaml
 ├── src/
-│   ├── guidance.py        # Guidance base + PurePursuit + PropNav + factory
+│   ├── guidance.py        # Guidance base + PurePursuit + PropNav + PropNavWoSpeed + factory
 │   ├── missions.py        # TargetMission base + example missions + factory
 │   ├── simulation.py      # Simulation loop, GUI, GIF writer, hit detection
 │   ├── units.py           # Unit class (constant speed, heading update)
@@ -46,7 +47,7 @@ A window titled Trajectory will open and animate both agents. A GIF will be save
 
 # Settings
 ```yaml
-guidance: "prop_nav"                 # "prop_nav" or "pure_pursuit"
+guidance: "prop_nav"                 # "prop_nav" or "pure_pursuit" or "prop_nav_wo_speed"
 mission: "BallisticAttackFromRight"  # "BallisticAttackFromRight" or "Pursuit"
 simulation:
   target_fps: 10                  # GUI + capture FPS

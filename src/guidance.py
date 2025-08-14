@@ -53,10 +53,40 @@ class PropNav(Guidance):
         self._prev_distance = distance
         return self._gamma_deg
 
+
+class PropNavWoSpeed(Guidance):
+    """Prop nav for cases we don't know our speed and closing speed."""
+    def __init__(self, interceptor: Unit, target: Unit):
+        super().__init__(interceptor, target)
+        self._prev_los_vector_angle = None
+        self.gain = 4
+        self.dt = 1
+        self._gamma_deg = None  # internal missile heading
+
+    def get_angle(self) -> float:
+        los_vector = self.target.coords - self.interceptor.coords
+        los_vector_angle = math.degrees(np.arctan2(los_vector[1], los_vector[0]))
+        if self._prev_los_vector_angle is None and self._gamma_deg is None:
+            los_rate_deg = 0
+            self._gamma_deg = los_vector_angle
+            gamma_rate_deg = scale = 0 # for printing
+        else:
+            psi = wrap_deg(los_vector_angle - self._gamma_deg)     # aspect angle
+            scale = max(-1.0, min(1.0, 2 * math.cos(math.radians(psi))))  # ~ V_m_proj / V_m, without 2* it breakes more often
+            los_rate_deg = wrap_deg(los_vector_angle - self._prev_los_vector_angle) / self.dt
+            gamma_rate_deg = los_rate_deg * self.gain * scale
+            self._gamma_deg = wrap_deg(self._gamma_deg + gamma_rate_deg * self.dt)
+        msg = f"LOS {los_vector_angle:.1f}, LOS rate {los_rate_deg:.1f}, scale {scale:.2f}, "\
+                f"gamma_rate_deg {gamma_rate_deg:.1f}, gamma_deg {self._gamma_deg:.1f}"
+        print(msg)
+        self._prev_los_vector_angle = los_vector_angle
+        return self._gamma_deg
+
 def get_guidance(guidance_mode: str) -> Type[Guidance]:
     available_modes = {
         "pure_pursuit": PurePursuit,
-        "prop_nav": PropNav
+        "prop_nav": PropNav,
+        "prop_nav_wo_speed": PropNavWoSpeed,
     }
     try:
         return available_modes[guidance_mode]
