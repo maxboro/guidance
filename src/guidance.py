@@ -53,8 +53,11 @@ class PropNav(Guidance):
         return self._gamma_deg
 
 def get_guidance(guidance_mode: str) -> Guidance:
-    match guidance_mode:
-        case "pure_pursuit":
-            return PurePursuit
-        case "prop_nav":
-            return PropNav
+    available_modes = {
+        "pure_pursuit": PurePursuit,
+        "prop_nav": PropNav
+    }
+    try:
+        return available_modes[guidance_mode]
+    except KeyError as exp:
+        raise KeyError (f"Available guidance modes are: {available_modes.keys()}") from exp

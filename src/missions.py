@@ -15,8 +15,11 @@ class Pursuit(TargetMission):
         return 0 + ((n_step + 1) / sim_n_steps) * 80
 
 def get_mission(mission_name: str) -> TargetMission:
-    match mission_name:
-        case "BallisticAttackFromRight":
-            return BallisticAttackFromRight
-        case "Pursuit":
-            return Pursuit
+    available_missions = {
+        "BallisticAttackFromRight": BallisticAttackFromRight,
+        "Pursuit": Pursuit
+    }
+    try:
+        return available_missions[mission_name]
+    except KeyError as exp:
+        raise KeyError (f"Available missions are: {available_missions.keys()}") from exp
