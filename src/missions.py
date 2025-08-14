@@ -10,7 +10,13 @@ class BallisticAttackFromRight:
     def get_angle(self, n_step: int, sim_n_steps: int):
         return 150 + ((n_step + 1) / sim_n_steps) * 80
 
+class Pursuit:
+    def get_angle(self, n_step: int, sim_n_steps: int):
+        return 0 + ((n_step + 1) / sim_n_steps) * 80
+
 def get_mission(mission_name: str) -> TargetMission:
     match mission_name:
         case "BallisticAttackFromRight":
             return BallisticAttackFromRight
+        case "Pursuit":
+            return Pursuit
