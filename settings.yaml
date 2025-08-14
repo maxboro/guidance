@@ -1,13 +1,15 @@
-guidance: "pure_pursuit"
+guidance: "prop_nav"
+mission: "BallisticAttackFromRight"
 simulation:
   target_fps: 10
-  sim_n_steps: 120
+  sim_n_steps: 300
+  blast_radius: 4
 target:
-  start_x: 100
+  start_x: 500
   start_y: 100
-  speed: 2
-inteseptor:
+  speed: 4
+interceptor:
   start_x: 0
   start_y: 0
-  speed: 3
+  speed: 2.5
 
