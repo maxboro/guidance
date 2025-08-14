@@ -9,7 +9,7 @@ def main():
 
     mission = get_mission(settings["mission"])()
     target = Unit(**settings["target"])
-    interceptor = Unit(**settings["inteseptor"])
+    interceptor = Unit(**settings["interceptor"])
     guidance = get_guidance(settings["guidance"])(interceptor, target)
 
     run_simulation(target, interceptor, guidance, mission, **settings["simulation"])
