@@ -1,4 +1,5 @@
 from abc import ABC, abstractmethod
+from typing import Type
 import math
 import numpy as np
 from .units import Unit
@@ -52,7 +53,7 @@ class PropNav(Guidance):
         self._prev_distance = distance
         return self._gamma_deg
 
-def get_guidance(guidance_mode: str) -> Guidance:
+def get_guidance(guidance_mode: str) -> Type[Guidance]:
     available_modes = {
         "pure_pursuit": PurePursuit,
         "prop_nav": PropNav
